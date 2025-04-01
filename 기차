@@ -1,0 +1,107 @@
+#include <iostream>
+using namespace std;
+
+int train[3][5][4] = {0};
+int totalAdults = 0, totalTeens = 0;
+int ADULT_FARE = 25000, TEEN_FARE = 18000;
+
+void displayTrain() {
+    for (int a = 0; a < 3; a++) {
+        cout << "\n열차 " << a + 1 << "호차" << endl;
+        for (int b = 0; b < 5; b++) {
+            for (int c = 0; c < 4; c++) {
+                if (c == 2) cout << "  "; // 통로
+                cout << (train[a][b][c] == 0 ? "0 " : "1 ");
+            }
+            cout << endl;
+        }
+    }
+}
+
+void reserveSeats() {
+    int adults, teens;
+    cout << "성인 인원수를 입력하세요: ";
+    cin >> adults;
+    cout << "청소년 인원수를 입력하세요: ";
+    cin >> teens;
+    
+    int totalPeople = adults + teens;
+    totalAdults += adults;
+    totalTeens += teens;
+    
+    cout << "좌석을 선택하세요 (호차 행 열):" << endl;
+    for (int i = 0; i < totalPeople; i++) {
+        int a, b, c;
+        while (true) {
+            cin >> a >> b >> c;
+            a--; b--; c--;
+            if (a >= 0 && a < 3 && b >= 0 && b < 5 && c >= 0 && c < 4 && train[a][b][c] == 0) {
+                train[a][b][c] = 1;
+                break;
+            } else {
+                cout << "잘못된 좌석이거나 이미 예약된 좌석입니다. 다시 입력하세요: ";
+            }
+        }
+    }
+    displayTrain();
+}
+
+void changeReservation() {
+    displayTrain();
+    cout << "변경할 좌석을 입력하세요 (호차 행 열): ";
+    int a, b, c;
+    cin >> a >> b >> c;
+    a--; b--; c--;
+    
+    if (train[a][b][c] == 1) {
+        train[a][b][c] = 0;
+        cout << "새로운 좌석을 입력하세요 (호차 행 열): ";
+        while (true) {
+            cin >> a >> b >> c;
+            a--; b--; c--;
+            if (a >= 0 && a < 3 && b >= 0 && b < 5 && c >= 0 && c < 4 && train[a][b][c] == 0) {
+                train[a][b][c] = 1;
+                break;
+            } else {
+                cout << "잘못된 좌석이거나 이미 예약된 좌석입니다. 다시 입력하세요: ";
+            }
+        }
+    } else {
+        cout << "해당 좌석은 예약되지 않았습니다." << endl;
+    }
+    displayTrain();
+}
+
+void calculateFare() {
+    int totalFare = (totalAdults * ADULT_FARE) + (totalTeens * TEEN_FARE);
+    cout << "총 성인 인원: " << totalAdults << "명" << endl;
+    cout << "총 청소년 인원: " << totalTeens << "명" << endl;
+    cout << "총 요금: " << totalFare << "원" << endl;
+}
+
+int main() {
+    while (true) {
+        cout << "\n기차 예약 시스템" << endl;
+        cout << "1. 좌석 예약 시스템" << endl;
+        cout << "2. 예약 변경" << endl;
+        cout << "3. 프로그램 종료" << endl;
+        cout << "번호를 입력하세요: ";
+        
+        int choice;
+        cin >> choice;
+        
+        if (choice == 1) {
+            displayTrain();
+            reserveSeats();
+        } else if (choice == 2) {
+            changeReservation();
+        } else if (choice == 3) {
+            calculateFare();
+            cout << "프로그램을 종료합니다." << endl;
+            break;
+        } else {
+            cout << "잘못된 입력입니다. 다시 시도하세요." << endl;
+        }
+    }
+    return 0;
+}
