@@ -1,16 +1,13 @@
 #include <iostream> 
 using namespace std;
 
-// DVD 이름 목록 (문자열 배열)
-string menu[] = {"액션", "코미디", "드라마", "SF", "애니메이션"};
+string menu[] = {"액션", "코미디", "드라마", "SF", "애니메이션"}; // DVD 이름 목록 (문자열)
 
-// DVD 가격 목록 (정수 배열)
-int prices[] = {12000, 15000, 11000, 16000, 13000};
+int prices[] = {12000, 15000, 11000, 16000, 13000}; // DVD 가격 목록 (정수)
 
-// 누적 금액 계산 (포인터로 전달된 total에 금액 누적)
 void addToTotal(int price, int count, int* total) {
-    *total += price * count;
-}
+    *total += price * count; 
+} // 누적 금액 계산 (포인터로 전달된 total에 금액 누적)
 
 void showMenu() {
     cout << "\n***** DVD 구매 프로그램 *****" << endl;
@@ -41,14 +38,21 @@ int main() {
             continue;
         }
 
-        cout << menu[choice - 1] << " DVD를 구매하시겠습니까? (Y/N): ";
-        cin >> confirm;
-
+        while (true) {
+            cout << menu[choice - 1] << " DVD를 구매하시겠습니까? (Y/N): ";
+            cin >> confirm;
+        
+            if (confirm == 'Y' || confirm == 'y' || confirm == 'N' || confirm == 'n') {
+                break;  
+            } else {
+                cout << "잘못된 입력입니다. Y 또는 N을 입력하세요." << endl;
+            }
+        }
+        
         if (confirm == 'N' || confirm == 'n') {
             cout << "메인 메뉴로 돌아갑니다." << endl;
             continue;
         }
-        
 
         cout << "몇 개를 구매하시겠습니까?: ";
         cin >> count;
@@ -58,11 +62,12 @@ int main() {
             continue;
         }
 
-        
-        addToTotal(prices[choice - 1], count, &total);
+        int thisPurchase = prices[choice - 1] * count;  // 이번 구매 금액 계산
+        addToTotal(prices[choice - 1], count, &total);  // 누적 금액에 추가
 
         cout << "[구매 완료] " << menu[choice - 1] << " DVD " << count << "개 구매" << endl;
-        cout << "현재까지 누적 금액: " << total << "원" << endl;
+        cout << "이번 구매 금액: " << thisPurchase << "원" << endl;
+
     }
 
     return 0;
